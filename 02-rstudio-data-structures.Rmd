@@ -1,0 +1,298 @@
+---
+title: "Data Structures"
+teaching: 40
+exercises: 15
+questions:
+- "How can I read data in R?"
+- "What are the basic data types in R?"
+- "How do I represent categorical information in R?"
+objectives:
+- "To be aware of the different types of data."
+- "To begin exploring data frames, and understand how they are related to vectors, factors and lists."
+- "To be able to ask questions from R about the type, class, and structure of an object."
+keypoints:
+- "Use `read.csv` to read tabular data in R."
+- "The basic data types in R are double, integer, complex, logical, and character."
+- "Use factors to represent categories in R."
+source: Rmd
+---
+One of R's most powerful features is its ability to deal with tabular data -
+such as you may already have in a spreadsheet or a CSV file. Let's start by
+importing a dataset from your `data/` directory, called `stream-temps.csv`.
+
+We can load this into R via the following:
+
+```{r}
+temps <- read.csv(file = "data/stream-temps.csv", stringsAsFactors=FALSE)
+temps
+```
+
+The `read.table` function is used for reading in tabular data stored in a text
+file where the columns of data are separated by punctuation characters such as
+CSV files (csv = comma-separated values). Tabs and commas are the most common
+punctuation characters used to separate or delimit data points in csv files. 
+For convenience R provides 2 other versions of `read.table`. These are: `read.csv`
+for files where the data are separated with commas and `read.delim` for files
+where the data are separated with tabs. Of these three functions `read.csv` is
+the most commonly used.  If needed it is possible to override the default 
+delimiting punctuation marks for both `read.csv` and `read.delim`.
+
+
+We can begin exploring our dataset right away, pulling out columns by specifying
+them using the `$` operator, here we use `[]` to index into the column to show 
+the first five entries:
+
+```{r}
+temps$NoRWeST_ID[1:5]
+temps$MonthlyMin[1:5]
+```
+
+Perhaps we want the data in Celcius instead of Fahrenheit, we can create a new column with the converted data:
+
+```{r}
+temps$MonthlyMin_C = (temps$MonthlyMin -32) * (5/9)
+```
+
+Or determine the departure from mean at a given location:
+```{r}
+temps$MonthlyMean[1] - temps$MonthlyMin[1]
+```
+
+But if you try combining a date with temperature what happens?
+
+```{r}
+temps$MonthlyMean[1] +  temps$MonthYear[1]
+```
+
+Understanding what happened here is key to successfully analyzing data in R.
+
+## Data Types
+
+AS you'd imagine, you cannot preform addition with a date, this concept of *data types* is important for programming, particularly when parsing environmental datasets. We can ask what type of data something is by:
+
+```{r}
+typeof(temps$MonthlyMean)
+```
+
+There are 5 main types: `double`, `integer`, `complex`, `logical` and `character`.
+
+```{r}
+typeof(3.14)
+typeof(1L) # The L suffix forces the number to be an integer, since by default R uses float numbers
+typeof(1+1i)
+typeof(TRUE)
+typeof('mayfly')
+```
+
+No matter how complicated our analyses become, all data in R is interpreted as one of these
+basic data types. This strictness has some really important consequences.
+
+Let's say someone has just started QAQC-ing the raw version of the data in the file `stream-temps-raw.csv`:
+
+We'll load the data like we did before:
+
+```{r}
+temps_raw <- read.csv(file="data/stream-temps-raw.csv")
+typeof(temps_raw$MonthlyMin)
+```
+
+Our temperatures aren't the double type anymore! If we try to do the same math
+we did on them before, we run into trouble:
+
+```{r}
+temps_raw$MonthlyMean[1] - temps_raw$MonthlyMin[1]
+```
+What happened? When R reads a csv file into one of these tables, it insists that everything in a column be the same basic type; if it can’t understand *everything* in the column as a double, then *nothing* in the column can be a double. The table that R loaded our temperature data into is called a *data.frame*, and it is our first example of something called a data structure - that is, a structure which R knows how to build out of the basic data types.
+
+We can see that it is a *data.frame* by calling the `class` function on it:
+
+```{r}
+class(temps)
+```
+
+In order to successfully use our data in R, we need to understand what the basic
+data structures are, and how they behave. For now, we'll use the cleaned temperature data while we investigate this behavior further.
+
+## Vectors and Type Coercion
+
+To better understand this behavior, let's meet another of the data structures:
+the *vector*.
+
+```{r}
+my_vector <- vector(length = 3)
+my_vector
+```
+
+A vector in R is essentially an ordered list of things, with the special
+condition that *everything in the vector must be the same basic data type*. If
+you don't choose the datatype, it'll default to `logical`; or, you can declare
+an empty vector of whatever type you like.
+
+
+```{r}
+another_vector <- vector(mode='character', length=3)
+another_vector
+```
+
+You can check if something is a vector:
+
+```{r}
+str(another_vector)
+```
+
+The output from this command indicates a few things 1) the basic data type
+found in this vector - in this case `chr`, character; 2) an indication of the
+number of things in the vector - actually, the indexes of the vector, in this
+case `[1:3]`; and 3) a few examples of what's actually in the vector - in this case
+empty character strings. If we similarly do
+
+```{r}
+str(temps$SD)
+```
+
+we see that `temps$SD` is a vector, too - *the columns of data we load into R
+data.frames are all vectors*, and that's the root of why R forces everything in
+a column to be the same basic data type.
+
+> ## Discussion 1
+>
+> Why is R so opinionated about what we put in our columns of data?
+> How does this help us?
+>
+> > ## Discussion 1
+> >
+> > By keeping everything in a column the same, we allow ourselves to make simple
+> > assumptions about our data; if you can interpret one entry in the column as a
+> > number, then you can interpret *all* of them as numbers, so we don't have to
+> > check every time. This consistency is what people mean when they talk about 
+> > *clean data*; in the long run, strict consistency goes a long way to making 
+> > our lives easier in R.
+> {: .solution}
+{: .discussion}
+
+You can also make vectors with explicit contents with the combine function:
+
+```{r}
+combine_vector <- c(2,6,3)
+combine_vector
+```
+
+Given what we've learned so far, what do you think the following will produce?
+
+```{r}
+quiz_vector <- c(2,6,'3')
+```
+
+This is something called *type coercion*, and it is the source of many surprises
+and the reason why we need to be aware of the basic data types and how R will
+interpret them. When R encounters a mix of types (here numeric and character) to
+be combined into a single vector, it will force them all to be the same
+type. Consider:
+
+```{r}
+coercion_vector <- c('a', TRUE)
+coercion_vector
+another_coercion_vector <- c(0, TRUE)
+another_coercion_vector
+```
+
+The coercion rules go: `logical` -> `integer` -> `numeric` -> `complex` ->
+`character`, where -> can be read as *are transformed into*. You can try to
+force coercion against this flow using the `as.` functions:
+
+```{r}
+character_vector_example <- c('0','2','4')
+character_vector_example
+character_coerced_to_numeric <- as.numeric(character_vector_example)
+character_coerced_to_numeric
+numeric_coerced_to_logical <- as.logical(character_coerced_to_numeric)
+numeric_coerced_to_logical
+```
+
+As you can see, some surprising things can happen when R forces one basic data
+type into another! Nitty-gritty of type coercion aside, the point is: if your
+data doesn't look like what you thought it was going to look like, type coercion
+may well be to blame; make sure everything is the same type in your vectors and
+your columns of data.frames, or you will get nasty surprises!
+
+But coercion can also be very useful! For example, in our `temps` data
+`QAQC` is numeric, but we know that the 1s and 0s actually represent
+`TRUE` and `FALSE` (a common way of representing them). We should use the
+`logical` datatype here, which has two states: `TRUE` or `FALSE`, which is
+exactly what our data represents. We can 'coerce' this column to be `logical` by
+using the `as.logical` function:
+
+```{r}
+temps$QAQC[1:5]
+temps$QAQC <- as.logical(temps$QAQC)
+temps$QAQC[1:10]
+```
+
+The combine function, `c()`, will also append things to an existing vector:
+
+```{r}
+ab_vector <- c('a', 'b')
+ab_vector
+combine_example <- c(ab_vector, 'SWC')
+combine_example
+```
+
+You can also make series of numbers:
+
+```{r}
+mySeries <- 1:10
+mySeries
+seq(10)
+seq(1,10, by=0.1)
+```
+
+We can ask a few questions about vectors:
+
+```{r}
+sequence_ex <- seq(10)
+head(sequence_ex, n=3)
+tail(sequence_ex, n=4)
+length(sequence_ex)
+class(sequence_ex)
+typeof(sequence_ex)
+```
+
+> ## Challenge 1
+>
+> What is an alternative way to show the beginning or end of a vector?
+>
+> > ## Challenge 1
+> >
+> > beginning: sequence_ex[1:3]
+> > end: sequence_ex[7:10] or sequence_ex[7:length(sequence_ex)]
+> > 
+> > There are multiple ways to many things, this will come up often when you are looking at someone elses code, or examples online. It's a great way to find cool tricks and more efficient ways to do things!
+> > 
+> {: .solution}
+{: .discussion}
+
+
+Finally, you can give names to elements in your vector:
+
+```{r}
+my_example <- 5:8
+names(my_example) <- c("a", "b", "c", "d")
+my_example
+names(my_example)
+```
+
+> ## Challenge 2
+>
+> Start by making a vector with the numbers 1 through 26.
+> Multiply the vector by 2, and give the resulting vector
+> names A through Z (hint: there is a built in vector called `LETTERS`)
+>
+> > ## Solution to Challenge 2
+> >
+> > ```{r}
+> > x <- 1:26
+> > x <- x * 2
+> > names(x) <- LETTERS
+> > ```
+> {: .solution}
+{: .challenge}
