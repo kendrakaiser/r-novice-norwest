@@ -1,0 +1,44 @@
+---
+title: Putting R to work
+teaching: 35
+exercises: 15
+questions:
+- "How can I use R to do standard statistics?"
+objectives:
+- "To be able to calculate means and standard deviations with subsets of data"
+- "To be able to create a linear regression"
+- "To be able to find packages that can support statistical analysis."
+- "To be able to use ggplot2 to generate graphics."
+keypoints:
+- ""
+- ""
+- "Use `ggplot2` to create plots."
+
+source: Rmd
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+temps <- read.csv(file = "data/stream-temps.csv", stringsAsFactors=TRUE)
+temps
+```
+
+## Saving time by using scripts
+dates <- as.Date(temps$MonthYear[1], "%m-%Y")
+
+
+```{r}
+plot(temps$MonthYear[temps$NoRWeST_ID == 'MidSnake_174'], temps$MonthlyMean[temps$NoRWeST_ID == 'MidSnake_174'])
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+

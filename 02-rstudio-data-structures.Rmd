@@ -23,7 +23,7 @@ importing a dataset from your `data/` directory, called `stream-temps.csv`.
 We can load this into R via the following:
 
 ```{r}
-temps <- read.csv(file = "data/stream-temps.csv", stringsAsFactors=FALSE)
+temps <- read.csv(file = "data/stream-temps.csv", stringsAsFactors=TRUE)
 temps
 ```
 
@@ -293,6 +293,149 @@ names(my_example)
 > > x <- 1:26
 > > x <- x * 2
 > > names(x) <- LETTERS
+> > ```
+> {: .solution}
+{: .challenge}
+
+## Data Frames
+
+We said that columns in data.frames were vectors:
+
+```{r}
+str(temps$MonthlyMax)
+str(temps$QAQC)
+```
+
+These make sense. But what about
+
+```{r}
+str(temps$NoRWeST_ID)
+```
+
+## Factors
+
+Another important data structure is called a *factor*. Factors usually look like
+character data, but are typically used to represent categorical information. For
+example, let's make a vector of strings labelling a few reaches of the Middle Snake:
+
+```{r}
+reaches <- c('MidSnake_1', 'MidSnake_2', 'MidSnake_1', 'MidSnake_3', 'MidSnake_2')
+reaches
+str(reaches)
+```
+We can turn a vector into a factor like so:
+
+```{r}
+reach_factors<- factor(reaches)
+class(reach_factors)
+str(reach_factors)
+```
+
+Now R has noticed that there are three possible categories in our data - but it
+also did something surprising; instead of printing out the strings we gave it,
+we got a bunch of numbers instead. R has replaced our human-readable categories
+with numbered indices under the hood, this is necessary as many statistical
+calculations utilise such numerical representations for categorical data:
+
+```{r}
+typeof(reaches)
+typeof(reach_factors)
+```
+> ## Challenge 3
+>
+> Is there a factor in our `temps` data.frame? what is its name?
+> Try using `?read.csv` to figure out how to keep text columns as character
+> vectors instead of factors; then write a command or two to show that the factor
+> in `temps` is actually a character vector when loaded in this way.
+>
+> > ## Solution to Challenge 2
+> >
+> > One solution is use the argument `stringAsFactors`:
+> >
+> > ```{r, eval = FALSE}
+> > temps <- read.csv(file="data/stream-temps.csv", stringsAsFactors=FALSE)
+> > str(temps$MonthYear)
+> > ```
+> >
+> > Another solution is use the argument `colClasses`
+> > that allow finer control.
+> >
+> > ```{r, eval = FALSE}
+> > temps <- read.csv(file="data/stream-temps.csv", colClasses=c(NA, NA, "character"))
+> > str(temps$MonthYear)
+> > ```
+> >
+> > Note: help files can be difficult to understand; take your best guess based on semantic meaning,
+> > even if you aren't sure, and remember google is a great resource.
+> {: .solution}
+{: .challenge}
+
+## Lists - not as common in timeseries data sets ... but should prob include
+
+## Matrices
+
+Last but not least is the matrix. We can declare a matrix full of zeros:
+
+```{r}
+matrix_example <- matrix(0, ncol=6, nrow=3)
+matrix_example
+```
+
+And similar to other data structures, we can ask things about our matrix:
+
+```{r}
+class(matrix_example)
+typeof(matrix_example)
+str(matrix_example)
+dim(matrix_example)
+nrow(matrix_example)
+ncol(matrix_example)
+```
+
+> ## Challenge 4
+>
+> What do you think will be the result of
+> `length(matrix_example)`?
+> Try it.
+> Were you right? Why / why not?
+>
+> > ## Solution to Challenge 4
+> >
+> > What do you think will be the result of
+> > `length(matrix_example)`?
+> >
+> > ```{r}
+> > matrix_example <- matrix(0, ncol=6, nrow=3)
+> > length(matrix_example)
+> > ```
+> >
+> > Because a matrix is a vector with added dimension attributes, `length`
+> > gives you the total number of elements in the matrix.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge 5
+>
+> Make another matrix, this time containing the numbers 1:50,
+> with 5 columns and 10 rows.
+> Did the `matrix` function fill your matrix by column, or by
+> row, as its default behaviour?
+> See if you can figure out how to change this.
+> (hint: read the documentation for `matrix`!)
+>
+> > ## Solution to Challenge 5
+> >
+> > Make another matrix, this time containing the numbers 1:50,
+> > with 5 columns and 10 rows.
+> > Did the `matrix` function fill your matrix by column, or by
+> > row, as its default behaviour?
+> > See if you can figure out how to change this.
+> > (hint: read the documentation for `matrix`!)
+> >
+> > ```{r, eval=FALSE}
+> > x <- matrix(1:50, ncol=5, nrow=10)
+> > x <- matrix(1:50, ncol=5, nrow=10, byrow = TRUE) # to fill by row
 > > ```
 > {: .solution}
 {: .challenge}
