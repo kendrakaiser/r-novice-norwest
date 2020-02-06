@@ -80,13 +80,6 @@ the `:` operator creates a sequence of numbers from the left element to the righ
 c(1, 2, 3, 4)
 ```
 
-
-We can ask for the same element multiple times:
-
-```{r}
-x[c(1,1,3)]
-```
-
 If we ask for an index beyond the length of the vector, R will return a missing value:
 ```{r}
 x[6]
@@ -120,35 +113,6 @@ We can skip multiple elements:
 ```{r}
 x[c(-1, -5)]  # or x[-c(1,5)]
 ```
-
-> ## Tip: Order of operations
->
-> A common trip up for novices occurs when trying to skip
-> slices of a vector. It's natural to try to negate a
-> sequence like so:
->
-> ```{r, error=TRUE, eval=FALSE}
-> x[-1:3]
-> ```
->
-> This gives a somewhat cryptic error:
->
-> ```{r, error=TRUE, echo=FALSE}
-> x[-1:3]
-> ```
->
-> But remember the order of operations. `:` is really a function.
-> It takes its first argument as -1, and its second as 3,
-> so generates the sequence of numbers: `c(-1, 0, 1, 2, 3)`.
->
-> The correct solution is to wrap that function call in brackets, so
-> that the `-` operator applies to the result:
->
-> ```{r}
-> x[-(1:3)]
-> ```
-{: .callout}
-
 
 To remove elements from a vector, we need to assign the result back
 into the variable:
@@ -196,7 +160,6 @@ x
 We can extract elements by using their name, instead of extracting by index:
 
 ```{r}
-x <- c(a=5.4, b=6.2, c=7.1, d=4.8, e=7.5) # we can name a vector 'on the fly'
 x[c("a", "c")]
 ```
 
@@ -282,84 +245,6 @@ x[names(x) == "a"]
 {: .challenge}
 
 
-> ## Tip: Non-unique names
->
-> You should be aware that it is possible for multiple elements in a
-> vector to have the same name. (For a data frame, columns can have
-> the same name --- although R tries to avoid this --- but row names
-> must be unique.) Consider these examples:
->
->```{r}
-> x <- 1:3
-> x
-> names(x) <- c('a', 'a', 'a')
-> x
-> x['a']  # only returns first value
-> x[names(x) == 'a']  # returns all three values
-> ```
-{: .callout}
-
-> ## Tip: Getting help for operators
->
-> Remember you can search for help on operators by wrapping them in quotes:
-> `help("%in%")` or `?"%in%"`.
->
-{: .callout}
-
-#not sure about including this
-## Skipping named elements 
-
-Skipping or removing named elements is a little harder. If we try to skip one named element by negating the string, R complains (slightly obscurely) that it doesn't know how to take the negative of a string:
-
-```{r}
-x <- c(a=5.4, b=6.2, c=7.1, d=4.8, e=7.5) # we start again by naming a vector 'on the fly'
-x[-"a"]
-```
-
-However, we can use the `!=` (not-equals) operator to construct a logical vector that will do what we want:
-
-```{r}
-x[names(x) != "a"]
-```
-
-Skipping multiple named indices is a little bit harder still. Suppose we want to drop the `"a"` and `"c"` elements, so we try this:
-
-```{r}
-x[names(x)!=c("a","c")]
-```
-
-R did *something*, but it gave us a warning that we ought to pay attention to - and it apparently *gave us the wrong answer* (the `"c"` element is still included in the vector)!
-
-So what does `!=` actually do in this case? That's an excellent question.
-
-### Recycling
-
-Let's take a look at the comparison component of this code:
-
-```{r}
-names(x) != c("a", "c")
-```
-
-Why does R give `TRUE` as the third element of this vector, when `names(x)[3] != "c"` is obviously false?
-When you use `!=`, R tries to compare each element
-of the left argument with the corresponding element of its right
-argument. What happens when you compare vectors of different lengths?
-
-![Inequality testing](../fig/06-rmd-inequality.1.png)
-
-When one vector is shorter than the other, it gets *recycled*:
-
-![Inequality testing: results of recycling](../fig/06-rmd-inequality.2.png)
-
-In this case R **repeats** `c("a", "c")` as many times as necessary to match `names(x)`, i.e. we get `c("a","c","a","c","a")`. Since the recycled `"a"`
-doesn't match the third element of `names(x)`, the value of `!=` is `TRUE`.
-Because in this case the longer vector length (5) isn't a multiple of the shorter vector length (2), R printed a warning message. If we had been unlucky and `names(x)` had contained six elements, R would *silently* have done the wrong thing (i.e., not what we intended it to do). This recycling rule can can introduce hard-to-find and subtle bugs!
-
-The way to get R to do what we really want (match *each* element of the left argument with *all* of the elements of the right argument) it to use the `%in%` operator. The `%in%` operator goes through each element of its left argument, in this case the names of `x`, and asks, "Does this element occur in the second argument?". Here, since we want to *exclude* values, we also need a `!` operator to change "in" to "not in":
-
-```{r}
-x[! names(x) %in% c("a","c") ]
-```
 
 > ## Challenge 3
 >
