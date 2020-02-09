@@ -4,10 +4,12 @@ teaching: 40
 exercises: 15
 questions:
 - "How can I read data in R?"
+- "How do I subset data to check it out?"
 - "What are the basic data types in R?"
 - "How do I represent categorical information in R?"
 objectives:
 - "To be aware of the different types of data."
+- "To be able to subset using indices"
 - "To begin exploring data frames, and understand how they are related to vectors, factors and lists."
 - "To be able to ask questions from R about the type, class, and structure of an object."
 keypoints:
@@ -38,9 +40,19 @@ the most commonly used.  If needed it is possible to override the default
 delimiting punctuation marks for both `read.csv` and `read.delim`.
 
 
-We can begin exploring our dataset right away, pulling out columns by specifying
-them using the `$` operator, here we use `[]` to index into the column to show 
-the first five entries:
+# Accessing elements using their indices
+
+To extract elements of a vector we can give their corresponding index, starting from one. Here we are calling the first value from the vector `MonthlyMax` that is held within the `temps` dataframe.
+
+```{r}
+temps$MonthlyMax[1]
+temps[1,4]
+```
+
+There are many ways to subset data, but these two options are the most common.  
+We can select a column by using the `$` operator after the name of the dataframe. We then index into the column using `[]` to pull out a single value. Alternatively we can use `[]` with two values to select a value [*row*, *column*]. 
+
+If we want to see multiple values we can show a *slice* of the vector using `:`
 
 ```{r}
 temps$NoRWeST_ID[1:5]
@@ -50,7 +62,7 @@ temps$MonthlyMin[1:5]
 Perhaps we want the data in Celcius instead of Fahrenheit, we can create a new column with the converted data:
 
 ```{r}
-temps$MonthlyMin_C = (temps$MonthlyMin -32) * (5/9)
+temps$MonthlyMin_C = (temps$MonthlyMin-32) * (5/9)
 ```
 
 Or determine the departure from mean at a given location:
@@ -215,17 +227,17 @@ data doesn't look like what you thought it was going to look like, type coercion
 may well be to blame; make sure everything is the same type in your vectors and
 your columns of data.frames, or you will get nasty surprises!
 
-But coercion can also be very useful! For example, in our `temps` data
-`QAQC` is numeric, but we know that the 1s and 0s actually represent
+But coercion can also be very useful! For example, in our `temps_raw` data
+`QAQC` is a numeric vector, but we know that the 1s and 0s actually represent
 `TRUE` and `FALSE` (a common way of representing them). We should use the
 `logical` datatype here, which has two states: `TRUE` or `FALSE`, which is
 exactly what our data represents. We can 'coerce' this column to be `logical` by
 using the `as.logical` function:
 
 ```{r}
-temps$QAQC[1:5]
-temps$QAQC <- as.logical(temps$QAQC)
-temps$QAQC[1:10]
+temps_raw$QAQC[1:5]
+temps_raw$QAQC <- as.logical(temps$QAQC)
+temps_raw$QAQC[1:10]
 ```
 
 The combine function, `c()`, will also append things to an existing vector:
