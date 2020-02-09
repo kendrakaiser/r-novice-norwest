@@ -153,6 +153,7 @@ plot(temps$date[temps$NoRWeST_ID == 'MidSnake_175'], temps$MonthlyMean[temps$NoR
 #or zoom into a specific year
 plot(temps$date[temps$SampleYear == 2010], temps$MonthlyMean[temps$SampleYear == 2010], pch=16, xlab="Month", ylab = "Temperature (C)")
 ```
+
 ## Combining logical conditions
 
 We often want to combine multiple logical
@@ -199,10 +200,12 @@ for (i in 175:178){
 ```
 
 
-## Break down problem into bite size pieces
+## Tips and Best Practices
+
+### Break down problem into bite size pieces
 When you first start out, problem solving and function writing can be daunting tasks, and hard to separate from code inexperience. Try to break down your problem into digestible chunks and worry about the implementation details later: keep breaking down the problem into smaller and smaller functions until you reach a point where you can code a solution, and build back up from there.
 
-## Style
+### Style
 
 Be consistent with naming conventions, break up sections of code with `#`
 ```{r}
@@ -213,11 +216,11 @@ Be consistent with naming conventions, break up sections of code with `#`
 # ----- Plot Data -----#
 ```
 
-## R packages for retrieving hydrologic data and modeling
+### R packages for retrieving hydrologic data and modeling
 
 https://cran.r-project.org/web/views/Hydrology.html
 
-## Doing GIS analysis in R and Python:
+### Doing GIS analysis in R and Python:
 
 Ever crashed your computer using ArcMap? Ever pressed "go" on an ArcGIS tool and proceeded to clean out five years of old emails while you waited, just to do it again 10 more times? Automation using R or python will make your life better. 
 
