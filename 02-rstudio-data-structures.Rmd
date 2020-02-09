@@ -26,7 +26,7 @@ We can load this into R via the following:
 
 ```{r}
 temps <- read.csv(file = "data/stream-temps.csv", stringsAsFactors=TRUE)
-temps
+head(temps)
 ```
 
 The `read.table` function is used for reading in tabular data stored in a text
@@ -166,12 +166,12 @@ we see that `temps$SD` is a vector, too - *the columns of data we load into R
 data.frames are all vectors*, and that's the root of why R forces everything in
 a column to be the same basic data type.
 
-> ## Discussion 1
+> ### Discussion 1
 >
 > Why is R so opinionated about what we put in our columns of data?
 > How does this help us?
 >
-> > ## Discussion 1
+> > ### Discussion 1
 > >
 > > By keeping everything in a column the same, we allow ourselves to make simple
 > > assumptions about our data; if you can interpret one entry in the column as a
@@ -179,8 +179,6 @@ a column to be the same basic data type.
 > > check every time. This consistency is what people mean when they talk about 
 > > *clean data*; in the long run, strict consistency goes a long way to making 
 > > our lives easier in R.
-> {: .solution}
-{: .discussion}
 
 You can also make vectors with explicit contents with the combine function:
 
@@ -236,7 +234,7 @@ using the `as.logical` function:
 
 ```{r}
 temps_raw$QAQC[1:5]
-temps_raw$QAQC <- as.logical(temps$QAQC)
+temps_raw$QAQC <- as.logical(temps_raw$QAQC)
 temps_raw$QAQC[1:10]
 ```
 
@@ -269,20 +267,17 @@ class(sequence_ex)
 typeof(sequence_ex)
 ```
 
-> ## Challenge 1
+> ### Challenge 1
 >
 > What is an alternative way to show the beginning or end of a vector?
 >
-> > ## Challenge 1
+> > ### Solution 1
 > >
 > > beginning: sequence_ex[1:3]
 > > end: sequence_ex[7:10] or sequence_ex[7:length(sequence_ex)]
-> > 
-> > There are multiple ways to many things, this will come up often when you are looking at someone elses code, or examples online. It's a great way to find cool tricks and more efficient ways to do things!
-> > 
-> {: .solution}
-{: .discussion}
-
+> >
+> > There are multiple ways to many things, this will come up often when you are looking > > at someone elses code, or examples online. It's a great way to find cool tricks and > > more efficient ways to do things!
+>
 
 Finally, you can give names to elements in your vector:
 
@@ -293,21 +288,6 @@ my_example
 names(my_example)
 ```
 
-> ## Challenge 2
->
-> Start by making a vector with the numbers 1 through 26.
-> Multiply the vector by 2, and give the resulting vector
-> names A through Z (hint: there is a built in vector called `LETTERS`)
->
-> > ## Solution to Challenge 2
-> >
-> > ```{r}
-> > x <- 1:26
-> > x <- x * 2
-> > names(x) <- LETTERS
-> > ```
-> {: .solution}
-{: .challenge}
 
 ## Data Frames
 
@@ -353,36 +333,40 @@ calculations utilise such numerical representations for categorical data:
 typeof(reaches)
 typeof(reach_factors)
 ```
-> ## Challenge 3
->
+> ### Challenge 2
+> 
 > Is there a factor in our `temps` data.frame? what is its name?
 > Try using `?read.csv` to figure out how to keep text columns as character
 > vectors instead of factors; then write a command or two to show that the factor
 > in `temps` is actually a character vector when loaded in this way.
->
-> > ## Solution to Challenge 2
-> >
+>  
+> > ### Solution to Challenge 2
+> >  
 > > One solution is use the argument `stringAsFactors`:
-> >
+> >  
 > > ```{r, eval = FALSE}
 > > temps <- read.csv(file="data/stream-temps.csv", stringsAsFactors=FALSE)
 > > str(temps$MonthYear)
 > > ```
-> >
-> > Another solution is use the argument `colClasses`
-> > that allow finer control.
-> >
+> >  
+> > Another solution is use the argument `colClasses` that allow finer control.
 > > ```{r, eval = FALSE}
 > > temps <- read.csv(file="data/stream-temps.csv", colClasses=c(NA, NA, "character"))
 > > str(temps$MonthYear)
 > > ```
-> >
-> > Note: help files can be difficult to understand; take your best guess based on semantic meaning,
-> > even if you aren't sure, and remember google is a great resource.
-> {: .solution}
-{: .challenge}
 
-## Lists - not as common in timeseries data sets ... but should prob include
+Note: help files can be difficult to understand; take your best guess based on semantic meaning, even if you aren't sure, and remember google is a great resource.
+
+## Lists
+
+Another data structure is the `list`. A list is simpler in some ways than the other types, because you can put anything you want in it:
+
+```{r}
+list_example <- list(1, "a", TRUE, 1+4i)
+list_example
+another_list <- list(title = "Numbers", numbers = 1:10, data = TRUE )
+another_list
+```
 
 ## Matrices
 
@@ -404,50 +388,28 @@ nrow(matrix_example)
 ncol(matrix_example)
 ```
 
-> ## Challenge 4
->
-> What do you think will be the result of
-> `length(matrix_example)`?
-> Try it.
+> ### Challenge 3
+>  
+> What do you think will be the result of `length(matrix_example)`?
+> 
 > Were you right? Why / why not?
->
-> > ## Solution to Challenge 4
-> >
-> > What do you think will be the result of
-> > `length(matrix_example)`?
-> >
-> > ```{r}
-> > matrix_example <- matrix(0, ncol=6, nrow=3)
-> > length(matrix_example)
-> > ```
-> >
+>  
+> > ### Solution to Challenge 4
+> > 
 > > Because a matrix is a vector with added dimension attributes, `length`
 > > gives you the total number of elements in the matrix.
-> {: .solution}
-{: .challenge}
 
 
-> ## Challenge 5
->
-> Make another matrix, this time containing the numbers 1:50,
-> with 5 columns and 10 rows.
-> Did the `matrix` function fill your matrix by column, or by
-> row, as its default behaviour?
+> ### Challenge 3
+> 
+> Make another matrix, this time containing the numbers 1:50, with 5 columns and 10 rows.
+> 
+> Did the `matrix` function fill your matrix by column, or by row, as its default behaviour?
 > See if you can figure out how to change this.
 > (hint: read the documentation for `matrix`!)
->
-> > ## Solution to Challenge 5
-> >
-> > Make another matrix, this time containing the numbers 1:50,
-> > with 5 columns and 10 rows.
-> > Did the `matrix` function fill your matrix by column, or by
-> > row, as its default behaviour?
-> > See if you can figure out how to change this.
-> > (hint: read the documentation for `matrix`!)
-> >
+> 
+> > ### Solution to Challenge 5
 > > ```{r, eval=FALSE}
 > > x <- matrix(1:50, ncol=5, nrow=10)
 > > x <- matrix(1:50, ncol=5, nrow=10, byrow = TRUE) # to fill by row
 > > ```
-> {: .solution}
-{: .challenge}

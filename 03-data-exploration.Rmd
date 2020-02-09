@@ -63,14 +63,14 @@ Here, I'll combine a `loop` and an `if` statement to fill in the empty `temps$da
 
 The format of a `loop` is:  
 
-for(`index` in `length`){  
-do this thing  
-}
+> for(`index` in `length`){  
+> do this thing  
+> }
 
 The format of a simple `if statement` is:  
-if (`test expression`){  
-do this thing  
-}
+> if (`test expression`){  
+> do this thing  
+> }
 
 We can now combine these with the `paste` function to make sure all samples have a date. 
 
