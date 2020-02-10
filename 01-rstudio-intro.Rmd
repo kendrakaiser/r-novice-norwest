@@ -1,36 +1,38 @@
 ---
 title: "Introduction to R and RStudio"
+keypoints:
+- Use RStudio to write and run R programs.
+- R has the usual arithmetic operators and mathematical functions.
+- Use `<-` to assign values to variables.
+- Use `ls()` to list the variables in a program.
+- Use `rm()` to delete objects in a program.
+- Use `install.packages()` to install packages (libraries).
+objectives:
+- Describe the purpose and use of each pane in the RStudio IDE
+- Locate buttons and options in the RStudio IDE
+- Define a variable
+- Assign data to a variable
+- Manage a workspace in an interactive R session
+- Use mathematical and comparison operators
+- Call functions
+- Manage packages
+output: pdf_document
+questions:
+- How to find your way around RStudio?
+- How to interact with R?
+- How to manage your environment?
+- How to install packages?
+source: Rmd
 teaching: 45
 exercises: 10
-questions:
-- "How to find your way around RStudio?"
-- "How to interact with R?"
-- "How to manage your environment?"
-- "How to install packages?"
-objectives:
-- "Describe the purpose and use of each pane in the RStudio IDE"
-- "Locate buttons and options in the RStudio IDE"
-- "Define a variable"
-- "Assign data to a variable"
-- "Manage a workspace in an interactive R session"
-- "Use mathematical and comparison operators"
-- "Call functions"
-- "Manage packages"
-keypoints:
-- "Use RStudio to write and run R programs."
-- "R has the usual arithmetic operators and mathematical functions."
-- "Use `<-` to assign values to variables."
-- "Use `ls()` to list the variables in a program."
-- "Use `rm()` to delete objects in a program."
-- "Use `install.packages()` to install packages (libraries)."
-source: Rmd
 ---
 
 #### Questions:  
 - "How to find your way around RStudio?"  
 - "How to interact with R?"  
 - "How to manage your environment?"  
-- "How to install packages?"  
+- "How to install packages?"
+  
 #### Objectives:
 - Describe the purpose and use of each pane in the RStudio IDE  
 - Locate buttons and options in the RStudio IDE  
@@ -39,7 +41,8 @@ source: Rmd
 - Manage a workspace in an interactive R session  
 - Use mathematical and comparison operators  
 - Call functions  
-- Manage packages  
+- Manage packages 
+  
 #### Keypoints:  
 - Use RStudio to write and run R programs.  
 - R has the usual arithmetic operators and mathematical functions.  
@@ -112,8 +115,8 @@ window. There are buttons, menu choices, and keyboard shortcuts. To run the
 current line, you can 
 1. click on the `Run` button above the editor panel, or 
 2. select "Run Lines" from the "Code" menu, or 
-3. hit <kbd>Ctrl</kbd>+<kbd>Return</kbd> in Windows or Linux 
-or <kbd>&#8984;</kbd>+<kbd>Return</kbd> on OS X.
+3. hit `Ctrl`+`Return` in Windows or Linux 
+or `Cmd`+`Return` on OS X.
 (This shortcut can also be seen by hovering the mouse over the button). To run a block of code, select it and then `Run`.
 
 ***
