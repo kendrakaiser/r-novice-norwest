@@ -26,6 +26,28 @@ keypoints:
 source: Rmd
 ---
 
+#### Questions:  
+- "How to find your way around RStudio?"  
+- "How to interact with R?"  
+- "How to manage your environment?"  
+- "How to install packages?"  
+#### Objectives:
+- Describe the purpose and use of each pane in the RStudio IDE  
+- Locate buttons and options in the RStudio IDE  
+- Define a variable  
+- Assign data to a variable  
+- Manage a workspace in an interactive R session  
+- Use mathematical and comparison operators  
+- Call functions  
+- Manage packages  
+#### Keypoints:  
+- Use RStudio to write and run R programs.  
+- R has the usual arithmetic operators and mathematical functions.  
+- Use `<-` to assign values to variables.  
+- Use `install.packages()` to install packages (libraries).  
+
+
+
 ## Motivation
 
 Once you've designed an experiment and collected

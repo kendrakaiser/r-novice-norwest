@@ -1,25 +1,44 @@
 ---
-title: Data exploration in R
-teaching: 55
+title: "Data exploration in R"
 exercises: 10
-questions:
-- "How can I use R to do explore my data?"
-objectives:
-Get an introduction to:
-- "date formats"
-- "loops"
-- "if statements"
-- "plotting"
-- "subsetting data"
-- "annotating code"
-
 keypoints:
-- "R can save you from doing repetative things manually"
-- "Google is your friend"
-- "Well annotated code will make your future self really happy with your current self, particularly after vacation"
-
+- R can save you from doing repetative things manually
+- Google is your friend
+- Well annotated code will make your future self really happy with your current self,
+  particularly after vacation
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+objectives: null
+questions: How can I use R to do explore my data?
 source: Rmd
+teaching: 55
+Get an introduction to:
+- date formats
+- loops
+- if statements
+- plotting
+- subsetting data
+- annotating code
 ---
+
+#### Questions: 
+"How can I use R to do explore my data?"  
+
+#### Objectives: Get an introduction to:  
+- date formats   
+- loops  
+- if statements  
+- plotting  
+- subsetting data  
+- annotating code  
+
+#### Keypoints:  
+- R can save you from doing repetative things manually  
+- Google is your friend  
+- Well annotated code will make your future self really happy with your current self,
+  particularly after vacation   
 
 ```{r}
 temps <- read.csv(file = "data/stream-temps.csv")
@@ -28,6 +47,11 @@ temps_raw <- read.csv(file = "data/stream-temps-raw.csv")
 ## Keep track of who wrote your code and its intended purpose
 Starting your code with an annotated description of what the code does when it is run will help you when you have to look at or change it in the future. Just one or two lines at the beginning of the file can save you or someone else a lot of time and effort when trying to understand what a particular script does.
 
+```{r}
+# Stream Temperature Data Exploration
+# Kendra Kaiser
+# February 11, 2020
+```
 ## Dates 
 
 One of the most common things we have to deal with when working with timeseries is converting dates into a format that is readable by R. The `as.Date` function converts from a character to R's `date` class, where the first argument is the character you want to convert, and the second is the structure of the date that is in the first argument. When I am trying something new that I dont have existing code to copy from, I often like to test things on a single value.
